@@ -50,7 +50,7 @@ router.post(
   }
 );
 
-// ROUTE 3 : Update an existing note : POST "/api/notes/updatenote". Login required
+// ROUTE 3 : Update an existing note : PUT "/api/notes/updatenote". Login required
 router.put("/updatenote/:id", fetchUser, async (req, res) => {
   try {
     const { title, description, tag } = req.body;
@@ -68,16 +68,44 @@ router.put("/updatenote/:id", fetchUser, async (req, res) => {
 
     //Find the note to be updated and update it
     let note = await Note.findById(req.params.id);
-    if(!note){
-      return res.status(404).send({error : "Note not found"});
-
+    if (!note) {
+      return res.status(404).send({ error: "Note not found" });
     }
-    if(note.user.toString() !== req.user.id){
-      return res.status(401).send({error : "Unauthorized"});
+    if (note.user.toString() !== req.user.id) {
+      return res.status(401).send({ error: "Unauthorized" });
     }
 
-    note = await Note.findByIdAndUpdate(req.params.id , {$set : newNote} , {new : true});
-    res.json({note});
-  } catch (error) {}
+    note = await Note.findByIdAndUpdate(
+      req.params.id,
+      { $set: newNote },
+      { new: true }
+    );
+    res.json({ note });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send("Internal Server Error : Some error occurred");
+  }
+});
+
+// ROUTE 4 : Delete an existing note : DELETE "/api/notes/deletenote". Login required
+router.delete("/deletenote/:id", fetchUser, async (req, res) => {
+  try {
+    //Find the note to be deleted and delete it
+    let note = await Note.findById(req.params.id);
+    if (!note) {
+      return res.status(404).send({ error: "Note not found" });
+    }
+
+    //Allow deletion only if user owns this note
+    if (note.user.toString() !== req.user.id) {
+      return res.status(401).send({ error: "Unauthorized" });
+    }
+
+    note = await Note.findByIdAndDelete(req.params.id);
+    res.json({ Success: "Note has been deleted" });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send("Internal Server Error : Some error occurred");
+  }
 });
 module.exports = router;
