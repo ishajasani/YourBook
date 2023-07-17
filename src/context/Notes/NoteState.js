@@ -4,7 +4,7 @@ import noteContext from "./NoteContext";
 const NoteState = (props) => {
     const notesInitial = [
         {
-          "_id": "64b3d2873803f8bc9b491ab5",
+          "_id": "64b3d2873802f8bc9b491ab5",
           "user": "64b1521f999b818cabe60d4c",
           "title": "first note",
           "description": "helllo hello",
@@ -13,7 +13,7 @@ const NoteState = (props) => {
           "__v": 0
         },
         {
-          "_id": "64b3d2873803f8bc9b491ab5",
+          "_id": "64b3d2873103f8bc9b491ab5",
           "user": "64b1521f999b818cabe60d4c",
           "title": "first note",
           "description": "helllo hello",
@@ -22,7 +22,7 @@ const NoteState = (props) => {
           "__v": 0
         },
         {
-          "_id": "64b3d2873803f8bc9b491ab5",
+          "_id": "64b3d1873803f8bc9b491ab5",
           "user": "64b1521f999b818cabe60d4c",
           "title": "first note",
           "description": "helllo hello",
@@ -31,7 +31,7 @@ const NoteState = (props) => {
           "__v": 0
         },
         {
-          "_id": "64b3d2873803f8bc9b491ab5",
+          "_id": "64b3d2373803f2bc9b491ab5",
           "user": "64b1521f999b818cabe60d4c",
           "title": "first note",
           "description": "helllo hello",
@@ -40,7 +40,7 @@ const NoteState = (props) => {
           "__v": 0
         },
         {
-          "_id": "64b3d2873803f8bc9b491ab5",
+          "_id": "64b3d2873803f8bc9b492ab5",
           "user": "64b1521f999b818cabe60d4c",
           "title": "first note",
           "description": "helllo hello",
@@ -49,7 +49,7 @@ const NoteState = (props) => {
           "__v": 0
         },
         {
-          "_id": "64b3d2873803f8bc9b491ab5",
+          "_id": "64b3d2873803f8bc9b431a35",
           "user": "64b1521f999b818cabe60d4c",
           "title": "first note",
           "description": "helllo hello",
@@ -80,8 +80,9 @@ const NoteState = (props) => {
         
       }
       //Delete a note
-      const deleteNote = () => {
-        
+      const deleteNote = (id) => {
+        const newNotes = notes.filter((note)=>{return note._id !== id});
+        setNotes(newNotes);
       }
   return (
     <noteContext.Provider value={{notes,addNote,editNote,deleteNote}}>{props.children}</noteContext.Provider>
