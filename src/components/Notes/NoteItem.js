@@ -4,7 +4,7 @@ import { useContext } from "react";
 const NoteItem = (props) => {
   const context = useContext(noteContext);
   const { deleteNote } = context;
-  const { note } = props;
+  const { note, updateNote } = props;
 
   return (
     <div className="col-md-3">
@@ -17,10 +17,18 @@ const NoteItem = (props) => {
                 className="fa-regular fa-trash mx-2"
                 onClick={() => {
                   deleteNote(note._id);
+                  props.showAlert("Note deleted successfully", "success");
                 }}
               ></i>
             </span>
-            <i className="fa-regular fa-file-pen mx-2"></i>
+            <span>
+              <i
+                className="fa-regular fa-file-pen mx-2"
+                onClick={() => {
+                  updateNote(note);
+                }}
+              ></i>
+            </span>
           </div>
           <p className="card-text">{note.description}</p>
         </div>

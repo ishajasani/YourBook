@@ -20,6 +20,7 @@ router.post(
     }),
   ],
   async (req, res) => {
+    let success = false;
     //if there are errors return bad request and the errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -31,7 +32,7 @@ router.post(
       if (user) {
         return res
           .status(400)
-          .json({ error: "Sorry a user with this name already exists" });
+          .json({success ,  error: "Sorry a user with this name already exists" });
       }
       const salt = await bcrypt.genSalt(10);
       const secPass = await bcrypt.hash(req.body.password, salt);
@@ -46,7 +47,8 @@ router.post(
         },
       };
       const authToken = jwt.sign(data, JWT_SECRET);
-      res.json({ authToken });
+      success = true;
+      res.json({ success , authToken });
     } catch (error) {
       console.log(error.message);
       res.status(500).send("Internal Server Error : Some error occurred");
@@ -67,6 +69,7 @@ router.post(
     body("password", "Cannot be blank").exists(),
   ],
   async (req, res) => {
+    let success = false;
     //if there are errors return bad request and the errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -79,12 +82,12 @@ router.post(
       if (!user) {
         return res
           .status(400)
-          .json("Please try to login with correct credentials");
+          .json({success , error : "Please try to login with correct credentials"});
       }
 
       const passComp = await bcrypt.compare(password, user.password);
       if (!passComp) {
-        return res.status(400).json("Please enter the correct credentials");
+        return res.status(400).json({success , error : "Please enter the correct credentials"});
       }
       const data = {
         user: {
@@ -92,7 +95,8 @@ router.post(
         },
       };
       const authToken = jwt.sign(data, JWT_SECRET);
-      res.json({ authToken });
+      success = true;
+      res.json({ success, authToken });
     } catch (error) {
       console.log(error.message);
       res.status(500).send("Internal Server Error : Some error occurred");
